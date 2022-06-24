@@ -24,9 +24,12 @@ class SkillView(APIView):
             skill_set = SkillSet.objects.get(name=skill)
             query |= Q(skill_set=skill_set)
         job_post_skill_sets = JobPostSkillSet.objects.filter(query)
-        job_post_ids = [job_post_skill_set.job_post_id for job_post_skill_set in job_post_skill_sets]
-        job_post_ids = list(set(job_post_ids))
-        job_posts = [JobPost.objects.get(id=id) for id in job_post_ids]
+        
+        job_post_ids = job_post_skill_sets.distinct().values_list('job_post_id')
+        # job_post_ids = [job_post_skill_set.job_post_id for job_post_skill_set in job_post_skill_sets]
+        # job_post_ids = list(set(job_post_ids))
+
+        job_posts = [JobPost.objects.get(id=id[0]) for id in job_post_ids]
 
         return Response(JobPostSerializer(job_posts, many=True).data, status=status.HTTP_200_OK)
 
