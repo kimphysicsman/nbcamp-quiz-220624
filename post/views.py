@@ -21,10 +21,10 @@ class SkillView(APIView):
        
         query = Q()
         for skill in skills:
-            # skill_set = SkillSet.objects.get(name=skill)
-            # query = query | Q(skillset=skill_set)
-            query = query | Q(skillset__name=skill)
-        job_posts = JobPost.objects.filter(query)
+            skill_set = SkillSet.objects.get(name=skill)
+            query |= Q(skill_set=skill_set)
+        job_post_skill_sets = JobPostSkillSet.objects.filter(query)
+        job_posts = [job_post_skill_set.job_post for job_post_skill_set in job_post_skill_sets]
 
         return Response(JobPostSerializer(job_posts, many=True).data, status=status.HTTP_200_OK)
 

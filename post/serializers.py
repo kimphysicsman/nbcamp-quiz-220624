@@ -30,7 +30,7 @@ class JobPostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobPost
-        fields = ['job_type', 'company', 'job_description', 'salary', 'skillsets']
+        fields = ['id', 'job_type', 'company', 'job_description', 'salary', 'skillsets']
 
     def create(self, validated_data):
         company = validated_data.pop('company')
