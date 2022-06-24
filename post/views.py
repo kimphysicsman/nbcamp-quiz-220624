@@ -19,11 +19,11 @@ class SkillView(APIView):
     def get(self, request):
         skills = self.request.query_params.getlist('skills', '')
        
-
         query = Q()
         for skill in skills:
-            skill_set = SkillSet.objects.get(name=skill)
-            query = query | Q(skillset=skill_set)
+            # skill_set = SkillSet.objects.get(name=skill)
+            # query = query | Q(skillset=skill_set)
+            query = query | Q(skillset__name=skill)
         job_posts = JobPost.objects.filter(query)
 
         return Response(JobPostSerializer(job_posts, many=True).data, status=status.HTTP_200_OK)
